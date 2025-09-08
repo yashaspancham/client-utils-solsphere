@@ -50,13 +50,11 @@ KNOWN_AVS = {
     "AVG": ["/usr/lib/avg/av/bin/avgscan"]
 }
 
-def get_linux_antivirus_status():
-    av_status = []
+def get_linux_antivirus_installed():
+    installed_avs = []
 
     for av_name, binaries in KNOWN_AVS.items():
         installed = False
-        running = False
-
         # Check if installed (binary exists)
         for binary in binaries:
             if shutil.which(binary) or shutil.which(binary.split("/")[-1]):
@@ -64,25 +62,13 @@ def get_linux_antivirus_status():
                 break
 
         if installed:
-            # Check if process is running
-            try:
-                ps_output = subprocess.check_output(["ps", "aux"], text=True)
-                if any(binary in ps_output for binary in binaries):
-                    running = True
-            except Exception:
-                pass
+            installed_avs.append({"name": av_name, "installed": True})
 
-        av_status.append({
-            "name": av_name,
-            "installed": installed,
-            "running": running
-        })
+    # If none installed, return "None"
+    if not installed_avs:
+        return [{"name": "None", "installed": False}]
 
-    # If no AV detected
-    if not any(av["installed"] for av in av_status):
-        return [{"name": "None", "installed": False, "running": False}]
-
-    return av_status
+    return installed_avs
 
 
 import os
