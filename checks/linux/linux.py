@@ -9,7 +9,6 @@ def get_disk_encryption_linux():
         )
         if "crypt" in lsblk:
             return {"enabled": True, "method": "LUKS/dm-crypt"}
-        # fallback: check if crypttab exists
         try:
             with open("/etc/crypttab") as f:
                 if f.read().strip():
@@ -55,7 +54,6 @@ def get_linux_antivirus_status():
 
     for av_name, binaries in KNOWN_AVS.items():
         installed = False
-        # Check if installed (binary exists)
         for binary in binaries:
             if shutil.which(binary) or shutil.which(binary.split("/")[-1]):
                 installed = True
@@ -64,7 +62,6 @@ def get_linux_antivirus_status():
         if installed:
             installed_avs.append({"name": av_name, "installed": True})
 
-    # If none installed, return "None"
     if not installed_avs:
         return [{"name": "None", "installed": False}]
 
@@ -75,10 +72,6 @@ import os
 import subprocess
 
 def get_linux_inactivity_timeout():
-    """
-    Check inactivity timeout on Linux (GNOME + KDE support).
-    Returns timeout in seconds and compliance status (<= 600s).
-    """
     timeout = None
     error = None
 

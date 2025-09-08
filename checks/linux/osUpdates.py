@@ -54,7 +54,6 @@ def check_pacman_updates():
 
 def check_dnf_updates():
     try:
-        # Get OS description from /etc/os-release
         desc = "Unknown Linux"
         try:
             with open("/etc/os-release", "r") as f:
@@ -65,7 +64,6 @@ def check_dnf_updates():
         except Exception:
             pass
 
-        # Run dnf check-update
         result = subprocess.run(
             ["dnf", "check-update"],
             text=True, capture_output=True
@@ -93,13 +91,11 @@ def check_dnf_updates():
 
 def check_yum_updates():
     try:
-        # Get OS description from /etc/redhat-release
         try:
             desc = subprocess.check_output(["cat", "/etc/redhat-release"], text=True).strip()
         except Exception:
             desc = "RedHat/CentOS (release info not found)"
 
-        # Run yum check-update
         result = subprocess.run(
             ["yum", "check-update"],
             text=True,
@@ -143,7 +139,6 @@ def check_yum_updates():
 
 def check_zypper_updates():
     try:
-        # Get OS description from /etc/os-release
         try:
             with open("/etc/os-release") as f:
                 lines = f.readlines()
@@ -152,7 +147,6 @@ def check_zypper_updates():
         except Exception:
             desc = "openSUSE/SLE (release info not found)"
 
-        # Run zypper list-updates
         result = subprocess.run(
             ["zypper", "lu"],
             text=True,
@@ -160,7 +154,7 @@ def check_zypper_updates():
         )
 
         updates = []
-        if result.returncode == 100:  # updates available
+        if result.returncode == 100: 
             updates = [line for line in result.stdout.splitlines() if line.strip()]
             return {
                 "osDescription": desc,
@@ -168,14 +162,14 @@ def check_zypper_updates():
                 "updatesAvailable": True,
                 "details": updates
             }
-        elif result.returncode == 0:  # no updates
+        elif result.returncode == 0: 
             return {
                 "osDescription": desc,
                 "packageManager": "zypper",
                 "updatesAvailable": False,
                 "details": []
             }
-        else:  # unexpected
+        else: 
             return {
                 "osDescription": desc,
                 "packageManager": "zypper",
