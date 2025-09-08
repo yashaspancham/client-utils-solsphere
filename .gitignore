@@ -1,0 +1,48 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+.env/
+.venv/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Logs & temp files
+*.log
+*.tmp
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE settings
+.vscode/
+.idea/
+*.iml
+
+# macOS system
+.AppleDouble
+.LSOverride
+
+# Windows system
+ehthumbs.db
+$RECYCLE.BIN/
+
+# Linux system
+*~
+
+# Coverage / testing
+.coverage
+htmlcov/
+.tox/
+pytest_cache/
