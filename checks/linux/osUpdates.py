@@ -54,20 +54,41 @@ def check_pacman_updates():
 
 def check_dnf_updates():
     try:
-        desc = subprocess.check_output(["cat", "/etc/redhat-release"], text=True).strip()
+        # Get OS description from /etc/os-release
+        desc = "Unknown Linux"
+        try:
+            with open("/etc/os-release", "r") as f:
+                for line in f:
+                    if line.startswith("PRETTY_NAME="):
+                        desc = line.split("=")[1].strip().strip('"')
+                        break
+        except Exception:
+            pass
+
+        # Run dnf check-update
         result = subprocess.run(
             ["dnf", "check-update"],
             text=True, capture_output=True
         )
-        updates = result.stdout.strip().split("\n") if result.returncode == 100 else []
+
+        updates = []
+        if result.returncode == 100:  # 100 = updates available
+            updates = result.stdout.strip().splitlines()
+
         return {
             "osDescription": desc,
             "packageManager": "dnf",
             "updatesAvailable": len(updates) > 0,
             "details": updates
         }
+
     except Exception as e:
-        return {"packageManager": "dnf", "error": str(e)}
+        return {
+            "packageManager": "dnf",
+            "osDescription": "Unknown",
+            "updatesAvailable": None,
+            "error": str(e)
+        }
 
 
 def check_yum_updates():
