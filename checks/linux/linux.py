@@ -50,7 +50,7 @@ KNOWN_AVS = {
     "AVG": ["/usr/lib/avg/av/bin/avgscan"]
 }
 
-def get_linux_antivirus_installed():
+def get_linux_antivirus_status():
     installed_avs = []
 
     for av_name, binaries in KNOWN_AVS.items():
