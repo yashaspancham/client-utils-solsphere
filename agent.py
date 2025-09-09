@@ -48,8 +48,10 @@ def run_daemon():
         # send_report(report) #forTesting
         if checks_str != last_state:
             print("Change detected, sending report...")
-            send_report(report)
-            last_state = checks_str
+            if send_report(report):
+                last_state = checks_str
+            else:
+                print("Failed to send report, will retry later.")
         else:
             print("No changes, skipping send.")
 
