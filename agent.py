@@ -35,7 +35,7 @@ def collect_system_checks():
     return state
 
 
-CHECK_INTERVAL = 60 * (1 / 8)  # 60*x = x minutes(in seconds)
+CHECK_INTERVAL = 60 * 20  # 60*x = x minutes(in seconds)
 last_state = None
 
 
