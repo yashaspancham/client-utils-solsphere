@@ -46,3 +46,7 @@ $RECYCLE.BIN/
 htmlcov/
 .tox/
 pytest_cache/
+
+#env
+env.py
+env.*
